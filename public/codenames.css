@@ -67,3 +67,8 @@ body {
 .backblack {
   background-color: black;
 }
+
+.nextGame {
+  float: right;
+  margin: 0 1em;
+}

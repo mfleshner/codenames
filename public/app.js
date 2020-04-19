@@ -7,15 +7,9 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.spymaster = false;
 
   function _getCards() {
-    /*for(var i = 0; i < $scope.cards.length; i++){
-      $http.put('/cards', $scope.cards[i]).then(
-        function(res) { },
-        function (err) { console.log('Error saving list item'); }
-      );
-    }*/
     $http.get('/cards').then(
-      function(res) { $scope.cards = res.data; $scope.doShuffle(); },
-      function (err) { console.log('Error getting todo list'); }
+      function(res) { $scope.cards = res.data;},
+      function (err) { console.log('Error getting cards'); }
     );
   }
   _getCards();
@@ -26,53 +20,20 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     //only allow two spymasters. add code below
   }
 
-  $scope.doShuffle = function() {
-    shuffleArray($scope.cards);
-    var arr = [];
-    while(arr.length < 25){
-      var r = Math.floor(Math.random() * 25);
-      if(arr.indexOf(r) === -1) arr.push(r);
-    }
-    for(var i = 0; i < 9; i++){
-      $scope.cards[arr[i]].textColor = "blue";
-      $scope.cards[arr[i]].backColor = "backblue";
-    }
-    for(var i = 9; i < 17; i++){
-      $scope.cards[arr[i]].textColor = "red";
-      $scope.cards[arr[i]].backColor = "backred";
-    }
-    for(var i = 17; i < 24; i++){
-      $scope.cards[arr[i]].textColor = "yellow";
-      $scope.cards[arr[i]].backColor = "backyellow";
-    }
-    $scope.cards[arr[24]].textColor = "black";
-    $scope.cards[arr[24]].backColor = "backblack";
-
-  }
-  
-  // -> Fisher–Yates shuffle algorithm
-  var shuffleArray = function(array) {
-    var m = array.length, t, i;
-  
-    // While there remain elements to shuffle
-    while (m) {
-      // Pick a remaining element…
-      i = Math.floor(Math.random() * m--);
-  
-      // And swap it with the current element.
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-  
-    return array;
+  $scope.nextGame = function(){
+    $http.get('/shuffle').then(
+      function(res) { $scope.cards = res.data;},
+      function (err) { console.log('Error shuffling'); }
+    );
+    window.location.reload();
   }
 
   $scope.select = function(card){
     //console.log("select: ", card);
     if(!card.selected) card.selected = true;
     else card.selected = false;
-    /*$http.put('/cards/update', card).then(
+    /*card.index = $scope.cards.indexOf(card);
+    $http.put('/cards/update', card).then(
       function (res) { _getCards(); },
       function (err) { console.log('Error saving list item'); }
     );*/
