@@ -1,0 +1,140 @@
+#forms html {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background-color: #333333;
+}
+#forms body {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background-color: #333333;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 16px;
+  color: #666;
+}
+#forms div, #forms h1, #forms form, #forms input, #forms p {
+  padding: 0;
+  margin: 0;
+  outline: none;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 16px;
+}
+#forms input {
+  color: LightYellow;
+}
+#forms h1 {
+  padding: 10px 0;
+  font-size: 32px;
+  text-align: center;
+}
+#forms p {
+  font-size: 12px;
+}
+#forms hr {
+  color: #a9a9a9;
+  opacity: 0.3;
+}
+#forms .textCenter {
+  color: goldenrod;
+}
+#forms .main-block {
+  max-width: 340px;
+  padding: 10px 0;
+  margin: auto;
+  border-radius: 5px;
+  border: solid 1px lightyellow;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.31);
+  background: #4d4d4d;
+}
+#forms form {
+  margin: 0 30px;
+}
+#forms input[type=radio] {
+  display: none;
+}
+#forms label#icon {
+  margin: 0;
+  border-radius: 5px 0 0 5px;
+}
+#forms label.radio {
+  position: relative;
+  display: inline-block;
+  color: lightyellow;
+  padding-top: 4px;
+  margin-right: 20px;
+  text-indent: 30px;
+  width: 40%;
+  margin-top: 5px;
+  overflow: visible;
+  cursor: pointer;
+}
+#forms label.radio:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: goldenrod;
+}
+#forms label.radio:after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 4px;
+  top: 8px;
+  left: 4px;
+  border: 3px solid #fff;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+#forms input[type=radio]:checked + label:after {
+  opacity: 1;
+}
+#forms input[type=text], #forms input[type=password] {
+  width: 75%;
+  height: 34px;
+  margin: 10px 0 0 0px;
+  padding-left: 10px;
+  border-radius: 0 5px 5px 0;
+  border: solid 1px #333333;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.09);
+  background: #333333;
+}
+#forms .last {
+  margin-bottom: 15px !important;
+}
+#forms #icon {
+  display: inline-block;
+  padding: 9.3px 15px;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.09);
+  background: goldenrod;
+  color: lightyellow;
+  width: 1em;
+  text-align: center;
+}
+#forms .btn-block {
+  margin-top: 10px;
+  text-align: center;
+}
+#forms button {
+  width: 100%;
+  padding: 10px 0;
+  margin: 10px auto;
+  border-radius: 5px;
+  border: none;
+  background: goldenrod;
+  font-size: 14px;
+  font-weight: 600;
+  color: lightyellow;
+}
+#forms button:hover {
+  background: goldenrod;
+}

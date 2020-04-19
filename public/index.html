@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app='kellyplextv'>
+<head>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="kellyplextv.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+  <!--<meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no;user-scalable=0;"/>-->
+</head>
+<body ng-controller='appController'>
+  <script src="jquery.js"></script>
+  <script src="angular.js"></script>
+  <script src='app.js'></script>
+<div class="role">
+  <button ng-click="role('spymaster')">Spymaster</button>
+  <button ng-click="role('guesser')">Guesser</button>
+</div>
+<div class="title">
+  <h1>Codenames</h1>
+
+  <div class="board">
+    <ul>
+      <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
+        <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">
+          <p class="word" ng-class="[{'{{card.textColor}}' : card.selected}, {'{{card.textColor}}' : spymaster}]">{{card.word}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div class="Changelog">
+    <h5><u>Changelog</u></h5>
+    <ul>
+      <li>February 12th 2019
+        <p>Added requested and completed dates</p>
+        <p>Added automatic google search when user clicks on media name in either list</p>
+        <p>Sorted completed list items by completed date</p>
+		<p>Added "Not Found" directory when media content could not be downloaded</p>
+      </li>
+    </ul>
+  </div>
+  
+  
+<div class="Changelog">
+    <h5><u>Changelog</u></h5>
+    <ul>
+      <li>February 12th 2019
+		<ul>
+		<li>Added requested and completed dates</li>
+		<li>Added automatic google search when user clicks on media name in either list</li>
+		<li>Sorted completed list items by completed date</li>
+		<li>Added "Not Found" directory when media content could not be downloaded</li>
+		<li>Added requester name (hover over media name to see requester)</li>
+		</ul>
+      </li>
+    </ul>
+  </div>
