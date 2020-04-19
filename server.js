@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const app = express();
 
 var CardModel = require('./cards');
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 var all_cards = [];
 var new_cards = [];
 
@@ -82,6 +84,7 @@ app.get('/cards', function (req, res) {
 app.get('/shuffle', function (req, res) {
   _newCards();
   res.json(new_cards);
+  io.emit('next game');
 });
 
 app.put('/cards', function (req, res) {
@@ -96,26 +99,20 @@ app.put('/cards', function (req, res) {
   });
 });
 
-/*app.put('/cards/update', function (req, res) {
-  var item = req.body
-    , model = CardModel;
-
-  console.log('updating card ', item);
-  model.findOneAndUpdate({ "_id": item._id }, {selected: item.selected}, function (err) {
-    if (err) { console.log('Error finding item', err); res.status(502).end(); }
-    else res.end();
-  });
-});*/
-
-app.put('/cards/update', function (req, res) {
-  var item = req.body;
-  if(!new_cards[item.index].selected) new_cards[item.index].selected = true;
-  else new_cards[item.index].selected = false;
-  console.log(new_cards[item.index].word, new_cards[item.index].selected)
+http.listen(80, () => {
+  console.log('listening on: 80');
 });
 
-app.listen(80, function () {
-  console.log('Server listening on port 80')
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+  socket.on('card selected', (card) => {
+    new_cards[card].selected = true;
+    console.log('card: ' + card);
+    io.emit('card selected', card);
+  });
 });
 
 mongoose.connect('mongodb://localhost/codenames', { useNewUrlParser: true }).then(

@@ -9,10 +9,12 @@
 <body ng-controller='appController'>
   <script src="jquery.js"></script>
   <script src="angular.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src='app.js'></script>
 <div class="role">
   <button ng-click="role('spymaster')">Spymaster</button>
   <button ng-click="role('guesser')">Guesser</button>
+  <button ng-click="nextGame()">Next Game</button>
 </div>
 <div class="title">
   <h1>Codenames</h1>
@@ -27,9 +29,6 @@
     </ul>
   </div>
 
-</div>
-<div class="nextGame" ng-if="spymaster">
-  <button ng-click="nextGame()">Next Game</button>
 </div>
 
 </body>

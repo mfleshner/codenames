@@ -7,9 +7,12 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "bufferutil": "^4.0.1",
     "express": "^4.16.4",
     "mongoose": "^5.8.3",
     "nodemailer": "^5.1.1",
-    "plex-api": "^5.2.1"
+    "plex-api": "^5.2.1",
+    "socket.io": "^2.3.0",
+    "utf-8-validate": "^5.0.2"
   }
 }
