@@ -12,8 +12,8 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src='app.js'></script>
 <div class="role">
-  <button ng-click="role('spymaster')">Spymaster</button>
-  <button ng-click="role('guesser')">Agent</button>
+  <button ng-click="role('spymaster')" ng-disabled='(masters>1)'>Spymaster</button>
+  <button ng-click="role('agent')">Agent</button>
   <button ng-click="nextGame()">Next Game</button>
 </div>
 <div class="title">

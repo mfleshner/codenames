@@ -9,6 +9,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var all_cards = [];
 var new_cards = [];
+var spymaster = 0;
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -72,6 +73,7 @@ _newCards = function(){
     else {
       all_cards = cards;
       _shuffle();
+      spymaster = 0;
     }
   });
 }
@@ -105,6 +107,7 @@ http.listen(80, () => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  io.emit('spymaster', spymaster);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
@@ -113,6 +116,12 @@ io.on('connection', (socket) => {
     else new_cards[card].selected = false;
     console.log('card: ' + card);
     io.emit('card selected', card);
+  });
+  socket.on('spymaster', (spy) => {
+    if(spy) spymaster++;
+    else if(spymaster > 0) spymaster--;
+    io.emit('spymaster', spymaster);
+    console.log('spymasters: ', spymaster);
   });
 });
 
