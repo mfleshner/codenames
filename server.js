@@ -109,7 +109,8 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
   socket.on('card selected', (card) => {
-    new_cards[card].selected = true;
+    if(!new_cards[card].selected) new_cards[card].selected = true;
+    else new_cards[card].selected = false;
     console.log('card: ' + card);
     io.emit('card selected', card);
   });

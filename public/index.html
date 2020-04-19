@@ -13,22 +13,21 @@
   <script src='app.js'></script>
 <div class="role">
   <button ng-click="role('spymaster')">Spymaster</button>
-  <button ng-click="role('guesser')">Guesser</button>
+  <button ng-click="role('guesser')">Agent</button>
   <button ng-click="nextGame()">Next Game</button>
 </div>
 <div class="title">
   <h1>Codenames</h1>
+</div>
 
-  <div class="board">
-    <ul>
-      <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
-        <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">
-          <p class="word" ng-class="[{'{{card.textColor}}' : card.selected}, {'{{card.textColor}}' : spymaster}]">{{card.word}}</p>
-        </div>
-      </li>
-    </ul>
-  </div>
-
+<div class="board">
+  <ul>
+    <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
+      <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">
+        <p class="word" ng-class="[{selected: card.selected}, {'{{card.textColor}}' : spymaster}]">{{card.word}}</p>
+      </div>
+    </li>
+  </ul>
 </div>
 
 </body>
