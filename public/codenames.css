@@ -13,7 +13,6 @@ body {
   text-align: center;
   color: white;
   font-size: 3em;
-  margin: 1em;
 }
 
 .board {
@@ -65,7 +64,7 @@ body {
 
 .backblue {
   background-color: blue;
-  background-image: url('img/bluecard.jpg');
+  background-image: url('img/blueback2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
@@ -73,7 +72,7 @@ body {
 
 .backred {
   background-color: red;
-  background-image: url('img/redcard.jpg');
+  background-image: url('img/redback2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
@@ -81,7 +80,7 @@ body {
 
 .backyellow {
   background-color: #f1f170;
-  background-image: url('img/yellowcard.jpg');
+  background-image: url('img/yellowback2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
@@ -89,7 +88,7 @@ body {
 
 .backblack {
   background-color: black;
-  background-image: url('img/blackcard.jpg');
+  background-image: url('img/blackback2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
