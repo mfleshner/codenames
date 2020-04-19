@@ -1,4 +1,4 @@
-angular.module('kellyplextv', []).controller('appController', function($scope, $http, $timeout, $q) {
+angular.module('codenames', []).controller('appController', function($scope, $http, $timeout, $q) {
   
   console.log("appController!");
 
