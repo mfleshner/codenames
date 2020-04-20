@@ -14,6 +14,9 @@
 <div class="role">
   <button ng-click="role('spymaster')" ng-disabled='(masters>1)'>Spymaster</button>
   <button ng-click="role('agent')">Agent</button>
+  <input type="radio" name="team" value="Red" ng-model="team"> Red
+  <input type="radio" name="team" value="Blue" ng-model="team"> Blue
+  <input type="radio" name="team" value="Spectator" ng-model="team"> Spectator
   <button class="nextG" ng-click="reset()">Reset</button>
   <button class="nextG" ng-click="nextGame()">Next Game</button>
 </div>

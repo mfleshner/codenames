@@ -12,6 +12,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.red = $scope.blue = 0;
   $scope.title = "Code Fleshy";
   $scope.turn = "Blue";
+  $scope.team = "Spectator";
 
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
@@ -94,23 +95,25 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   }
 
   $scope.select = function(card){
-    if(!card.selected){
-      if(card.textColor == "red"){
-        $scope.red--;
-        if($scope.turn == "Blue") $scope.endTurn();
+    if($scope.team == $scope.turn || $scope.spymaster) {
+      if(!card.selected){
+        if(card.textColor == "red"){
+          $scope.red--;
+          if($scope.turn == "Blue") $scope.endTurn();
+        }
+        else if(card.textColor == "blue"){
+          $scope.blue--;
+          if($scope.turn == "Red") $scope.endTurn();
+        }
+        else $scope.endTurn();
       }
-      else if(card.textColor == "blue"){
-        $scope.blue--;
-        if($scope.turn == "Red") $scope.endTurn();
+      else{
+        if(card.textColor == "red") $scope.red++;
+        else if(card.textColor == "blue") $scope.blue++;
       }
-      else $scope.endTurn();
+      socket.emit('card selected', $scope.cards.indexOf(card));
+      if($scope.red == 0 || $scope.blue == 0) _gameover();
     }
-    else{
-      if(card.textColor == "red") $scope.red++;
-      else if(card.textColor == "blue") $scope.blue++;
-    }
-    socket.emit('card selected', $scope.cards.indexOf(card));
-    if($scope.red == 0 || $scope.blue == 0) _gameover();
   }
 
   socket.on('spymaster', function(masters){ //new spymaster added
