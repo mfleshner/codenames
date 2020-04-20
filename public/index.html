@@ -18,11 +18,12 @@
   <button class="nextG" ng-click="nextGame()">Next Game</button>
 </div>
 <div class="title">
-  <h1 ng-class="[{bluermain : (blue == 0)}, {redremain : (red == 0)}]">{{title}}</h1>
+  <h1 ng-class="[{blueremain : (blue == 0)}, {redremain : (red == 0)}]">{{title}}</h1>
 </div>
 
 <div class="board">
-  <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span></p>
+  <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span> <span ng-class="[{blueremain : (turn == 'Blue')}, {redremain : (turn == 'Red')}]">{{turn}}'s turn!</span></p>
+  <button class="turn" ng-click="endTurn()">End Turn</button>
   <p class="spymasters">Spymasters: {{masters}}</p>
   <ul>
     <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">

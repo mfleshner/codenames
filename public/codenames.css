@@ -51,6 +51,9 @@ body {
 .redremain {
   color: red;
 }
+.turn{
+  float: left;
+}
 
 .card {
   width: 15%;
