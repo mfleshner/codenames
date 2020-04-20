@@ -13,6 +13,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.title = "Code Fleshy";
   $scope.turn = "Blue";
   $scope.team = "Spectator";
+  $scope.kid = false;
 
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
@@ -95,7 +96,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   }
 
   $scope.select = function(card){
-    if($scope.team == $scope.turn || $scope.spymaster) {
+    if(($scope.team == $scope.turn || $scope.spymaster) && !$scope.kid) {
       if(!card.selected){
         if(card.textColor == "red"){
           $scope.red--;
