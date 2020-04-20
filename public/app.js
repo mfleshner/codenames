@@ -27,6 +27,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.endTurn = function(){
     if($scope.turn == "Blue") $scope.turn = "Red";
     else $scope.turn = "Blue";
+    socket.emit('turn', $scope.turn);
   }
 
   function _remaining(){
@@ -56,6 +57,10 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     $http.get('/spymasters').then(
       function(res) { $scope.masters = res.data; console.log("Get Spymasters: ", $scope.masters);},
       function (err) { console.log('Error getting cards'); }
+    );
+    $http.get('/turn').then(
+      function(res) { $scope.turn = res.data;},
+      function (err) { console.log('Error getting turn'); }
     );
   }
   _getCards();
@@ -108,6 +113,12 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   });
   socket.on('spymaster reset', function(card){ //card selected
     $scope.spymaster = false;
+  });
+  socket.on('turn', function(turn){ //card selected
+    $http.get('/turn').then(
+      function(res) { $scope.turn = res.data;},
+      function (err) { console.log('Error getting turn'); }
+    );
   });
   socket.on('card selected', function(card){ //card selected
     _getCards();

@@ -11,6 +11,7 @@ var all_cards = [];
 var new_cards = [];
 var old_arr = [];
 var spymaster = 0;
+var turn = "Blue";
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -95,6 +96,10 @@ app.get('/shuffle', function (req, res) {
   io.emit('next game');
 });
 
+app.get('/turn', function (req, res) {
+  res.json(turn);
+});
+
 app.get('/spymasters', function (req, res) {
   res.json(spymaster);
 });
@@ -138,6 +143,10 @@ io.on('connection', (socket) => {
     else if(spymaster > 0) spymaster--;
     io.emit('spymaster', spymaster);
     console.log('spymasters: ', spymaster);
+  });
+  socket.on('turn', (whoTurn) => {
+    turn = whoTurn;
+    io.emit('turn', turn);
   });
 });
 
