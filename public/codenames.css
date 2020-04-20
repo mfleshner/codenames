@@ -35,6 +35,14 @@ body {
   margin: 0 1em;
   font-size: 0.5em;
   color: white;
+  float: left;
+}
+
+.spymasters {
+  text-align: right;
+  margin: 0 1em;
+  font-size: 0.5em;
+  color: white;
 }
 
 .blueremain {
@@ -59,8 +67,14 @@ body {
 
 .word {
   font-size: 0.5em;
-  margin-top: 5.5vh;
+  margin-top: 6vh;
   color: black;
+}
+
+@media only screen and (max-height: 768px) {
+  .word {
+    margin-top: 5.5vh;
+  }
 }
 
 .selected {

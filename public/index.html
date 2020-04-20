@@ -23,6 +23,7 @@
 
 <div class="board">
   <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span></p>
+  <p class="spymasters">Spymasters: {{masters}}</p>
   <ul>
     <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
       <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">

@@ -9,6 +9,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var all_cards = [];
 var new_cards = [];
+var old_arr = [];
 var spymaster = 0;
 
 app.use(express.static('./public'));
@@ -33,13 +34,13 @@ var shuffleArray = function(array) {
   return array;
 }
 
-_shuffle = function(){
-  shuffleArray(all_cards);
+_pickCards = function(){
   var arr = [];
   while(arr.length < 25){
     var r = Math.floor(Math.random() * (all_cards.length-1));
-    if(arr.indexOf(r) === -1) arr.push(r);
+    if((arr.indexOf(r) === -1) && (old_arr.indexOf(r) === -1)){ arr.push(r); old_arr.push(r);}
   }
+  if(old_arr.length > 795) old_arr = [];
   for(var i = 0; i < 25; i++){
     new_cards[i] = all_cards[arr[i]];
     new_cards[i].selected = false;
@@ -63,7 +64,11 @@ _shuffle = function(){
   }
   new_cards[arr[24]].textColor = "black";
   new_cards[arr[24]].backColor = "backblack";
+}
 
+_shuffle = function(){
+  shuffleArray(all_cards);
+  _pickCards();
   console.log("server: 25 new cards!");
 }
 
@@ -73,7 +78,7 @@ _newCards = function(){
     else {
       all_cards = cards;
       _shuffle();
-      spymaster = 0;
+      spymaster = 0; //reset spymaster
     }
   });
 }
@@ -84,9 +89,20 @@ app.get('/cards', function (req, res) {
 });
 
 app.get('/shuffle', function (req, res) {
-  _newCards();
+  //_newCards();
+  _pickCards(); //don't reshuffle, just pick new cards
   res.json(new_cards);
   io.emit('next game');
+});
+
+app.get('/spymasters', function (req, res) {
+  res.json(spymaster);
+});
+app.put('/spymasters', function (req, res) {
+  spymaster = 0;
+  io.emit('spymaster', spymaster);
+  io.emit('spymaster reset');
+  res.end();
 });
 
 app.put('/cards', function (req, res) {
@@ -107,7 +123,7 @@ http.listen(80, () => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  io.emit('spymaster', spymaster);
+  //io.emit('spymaster', spymaster);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
