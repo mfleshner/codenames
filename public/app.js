@@ -70,11 +70,12 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
       function(res) { },
       function (err) { console.log('Error resetting spymasters'); }
     );
+    socket.emit('turn', "Blue");
   }
 
   $scope.role = function(role){
     var old = $scope.spymaster;
-    if(role == 'spymaster' && ($scope.masters < 2)){
+    if(role == 'spymaster' && ($scope.masters < 2) && !old){
       $scope.spymaster = true;
       socket.emit('spymaster', $scope.spymaster);
     }
@@ -94,8 +95,15 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
 
   $scope.select = function(card){
     if(!card.selected){
-      if(card.textColor == "red") $scope.red--;
-      else if(card.textColor == "blue") $scope.blue--;
+      if(card.textColor == "red"){
+        $scope.red--;
+        if($scope.turn == "Blue") $scope.endTurn();
+      }
+      else if(card.textColor == "blue"){
+        $scope.blue--;
+        if($scope.turn == "Red") $scope.endTurn();
+      }
+      else $scope.endTurn();
     }
     else{
       if(card.textColor == "red") $scope.red++;
