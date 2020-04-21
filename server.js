@@ -75,11 +75,12 @@ _shuffle = function(){
 }
 
 _newCards = function(){
+  console.log("Getting Cards...");
   CardModel.find({}).lean().exec(function (err, cards) {
     if (err) console.log('Error getting cards:', err);
     else {
       all_cards = cards;
-      _shuffle();
+      if(all_cards.length > 1) _shuffle();
       spymaster = 0; //reset spymaster
     }
   });
@@ -128,8 +129,8 @@ app.put('/cards', function (req, res) {
   });
 });
 
-http.listen(80, () => {
-  console.log('listening on: 80');
+http.listen(8090, () => {
+  console.log('listening on: 8090');
 });
 
 io.on('connection', (socket) => {
