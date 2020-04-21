@@ -140,3 +140,20 @@ body {
   float: right;
   margin: 0 1em;
 }
+
+.alert {
+  position: absolute;
+  top: 25%;
+  right: 25%;
+  height: 45vh;
+  width: 50%;
+  background-color: #777777;
+  text-align: center;
+  font-size: 5em;
+  color: white;
+  display: none;
+}
+
+.message {
+  margin: 1em;
+}

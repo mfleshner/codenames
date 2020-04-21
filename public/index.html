@@ -22,7 +22,7 @@
   <button class="nextG" ng-click="nextGame()">Next Game</button>
 </div>
 <div class="title">
-  <h1 ng-class="[{blueremain : (blue == 0)}, {redremain : (red == 0)}]">{{title}}</h1>
+  <h1 ng-class="[{blueremain : (title == 'BLUE WINS!!!')}, {redremain : (title == 'RED WINS!!!')}]">{{title}}</h1>
 </div>
 
 <div class="board">
@@ -36,6 +36,10 @@
       </div>
     </li>
   </ul>
+</div>
+
+<div class="alert">
+  <h1 class="message">Good Job!!!</h1>
 </div>
 
 </body>

@@ -18,6 +18,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
     else if($scope.blue == 0) $scope.title = "BLUE WINS!!!";
+    else $scope.title = $scope.title = $scope.death_win;
     $timeout(function(){
       for(i = 0; i < 25; i++){
         $scope.cards[i].selected = false;
@@ -45,7 +46,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     for(var i = 0; i < $scope.cards.length; i++){
       $http.put('/cards', $scope.cards[i]).then(
         function(res) { },
-        function (err) { console.log('Error saving list item'); }
+        function (err) { console.log('Error saving card'); }
       );
     }
   }
@@ -57,7 +58,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
       function (err) { console.log('Error getting cards'); }
     );
     $http.get('/spymasters').then(
-      function(res) { $scope.masters = res.data; console.log("Get Spymasters: ", $scope.masters);},
+      function(res) { $scope.masters = res.data;},
       function (err) { console.log('Error getting cards'); }
     );
     $http.get('/turn').then(
@@ -106,6 +107,12 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
           $scope.blue--;
           if($scope.turn == "Red") $scope.endTurn();
         }
+        else if(card.textColor == "black"){
+          if($scope.turn == "Red") $scope.death_win = "BLUE WINS!!!";
+          else $scope.death_win = "RED WINS!!!";
+          socket.emit('death card', $scope.death_win);
+          //_gameover();
+        }
         else $scope.endTurn();
       }
       else{
@@ -119,7 +126,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
 
   socket.on('spymaster', function(masters){ //new spymaster added
     $http.get('/spymasters').then(
-      function(res) { $scope.masters = res.data; console.log("Get Spymasters: ", $scope.masters);},
+      function(res) { $scope.masters = res.data; },
       function (err) { console.log('Error getting cards'); }
     );
   });
@@ -134,6 +141,12 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   });
   socket.on('card selected', function(card){ //card selected
     _getCards();
+  });
+  socket.on('death card', function(){
+    $http.get('/death').then(
+      function(res) { $scope.death_win = res.data; _gameover();},
+      function (err) { console.log('Error getting turn'); }
+    );
   });
   socket.on('next game', function(){ //new game
     //$scope.spymaster = false;

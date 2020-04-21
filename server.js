@@ -12,6 +12,7 @@ var new_cards = [];
 var old_arr = [];
 var spymaster = 0;
 var turn = "Blue";
+var death_win = "";
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -103,6 +104,11 @@ app.get('/turn', function (req, res) {
 app.get('/spymasters', function (req, res) {
   res.json(spymaster);
 });
+
+app.get('/death', function (req, res) {
+  res.json(death_win);
+});
+
 app.put('/spymasters', function (req, res) {
   spymaster = 0;
   io.emit('spymaster', spymaster);
@@ -147,6 +153,10 @@ io.on('connection', (socket) => {
   socket.on('turn', (whoTurn) => {
     turn = whoTurn;
     io.emit('turn', turn);
+  });
+  socket.on('death card', (death) => {
+    death_win = death;
+    io.emit('death card');
   });
 });
 
