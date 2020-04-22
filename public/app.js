@@ -9,6 +9,8 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   var socket = io();
   $scope.spymaster = false;
   $scope.masters = 0;
+  $scope.agents = 0;
+  $scope.players = 0;
   $scope.red = $scope.blue = 0;
   $scope.title = "Code Fleshy";
   $scope.turn = "Blue";
@@ -50,30 +52,10 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
       );
     }
   }
-
-  function _getCards() {
-    //_addNewCards();
-    $http.get('/cards').then(
-      function(res) { $scope.cards = res.data; _remaining();},
-      function (err) { console.log('Error getting cards'); }
-    );
-    $http.get('/spymasters').then(
-      function(res) { $scope.masters = res.data;},
-      function (err) { console.log('Error getting cards'); }
-    );
-    $http.get('/turn').then(
-      function(res) { $scope.turn = res.data;},
-      function (err) { console.log('Error getting turn'); }
-    );
-  }
-  _getCards();
+  //_addNewCards();
 
   $scope.reset = function(){
-    $http.put('/spymasters').then(
-      function(res) { },
-      function (err) { console.log('Error resetting spymasters'); }
-    );
-    socket.emit('turn', "Blue");
+    socket.emit('reset');
   }
 
   $scope.role = function(role){
@@ -89,10 +71,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   }
 
   $scope.nextGame = function(){
-    $http.get('/shuffle').then(
-      function(res) { $scope.cards = res.data;},
-      function (err) { console.log('Error shuffling'); }
-    );
+    socket.emit('shuffle');
     $scope.title = "Code Fleshy";
   }
 
@@ -124,35 +103,36 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     }
   }
 
+  socket.on('get cards', function(cards){ //new spymaster added
+    $scope.$apply(function(){ $scope.cards = cards; _remaining();}); 
+  });
   socket.on('spymaster', function(masters){ //new spymaster added
-    $http.get('/spymasters').then(
-      function(res) { $scope.masters = res.data; },
-      function (err) { console.log('Error getting cards'); }
-    );
+    $scope.$apply(function(){ $scope.masters = masters; $scope.agents = $scope.players - $scope.masters;}); 
   });
-  socket.on('spymaster reset', function(card){ //card selected
-    $scope.spymaster = false;
+  socket.on('spymaster reset', function(){ //reset spymasters
+    $scope.$apply(function(){
+      $scope.spymaster = false;
+      $scope.masters = 0;
+      $scope.turn = "Blue";
+    });
   });
-  socket.on('turn', function(turn){ //card selected
-    $http.get('/turn').then(
-      function(res) { $scope.turn = res.data;},
-      function (err) { console.log('Error getting turn'); }
-    );
+  socket.on('turn', function(turn){ //end turn
+    $scope.$apply(function(){ $scope.turn = turn;});
   });
-  socket.on('card selected', function(card){ //card selected
-    _getCards();
+  socket.on('card selected', function(cards){ //card selected
+    $scope.$apply(function(){ $scope.cards = cards;});
   });
-  socket.on('death card', function(){
-    $http.get('/death').then(
-      function(res) { $scope.death_win = res.data; _gameover();},
-      function (err) { console.log('Error getting turn'); }
-    );
+  socket.on('death card', function(death_win){ //win by death card
+    $scope.$apply(function(){ $scope.death_win = death_win; _gameover();});
   });
-  socket.on('next game', function(){ //new game
-    //$scope.spymaster = false;
+  socket.on('players', function(players){ //win by death card
+    console.log('players');
+    $scope.$apply(function(){ $scope.players = players; $scope.agents = $scope.players - $scope.masters;});
+  });
+  socket.on('next game', function(cards){ //new game
     $scope.reset();
     $scope.title = "Code Fleshy";
-    _getCards();
+    $scope.$apply(function(){ $scope.cards = cards;});
   });
 
 });

@@ -13,6 +13,7 @@ var old_arr = [];
 var spymaster = 0;
 var turn = "Blue";
 var death_win = "";
+var players = 0;
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -87,36 +88,6 @@ _newCards = function(){
 }
 _newCards();
 
-app.get('/cards', function (req, res) {
-  res.json(new_cards);
-});
-
-app.get('/shuffle', function (req, res) {
-  //_newCards();
-  _pickCards(); //don't reshuffle, just pick new cards
-  res.json(new_cards);
-  io.emit('next game');
-});
-
-app.get('/turn', function (req, res) {
-  res.json(turn);
-});
-
-app.get('/spymasters', function (req, res) {
-  res.json(spymaster);
-});
-
-app.get('/death', function (req, res) {
-  res.json(death_win);
-});
-
-app.put('/spymasters', function (req, res) {
-  spymaster = 0;
-  io.emit('spymaster', spymaster);
-  io.emit('spymaster reset');
-  res.end();
-});
-
 app.put('/cards', function (req, res) {
   var item = req.body
     , model = CardModel;
@@ -135,21 +106,25 @@ http.listen(8090, () => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  //io.emit('spymaster', spymaster);
+  players++;
+  io.emit('spymaster', spymaster); //send spymaster count
+  io.emit('get cards', new_cards); //send current cards
+  io.emit('turn', turn); //send current turn
+  io.emit('players', players); //send player count
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    players--;
+    io.emit('players', players); //send player count
   });
   socket.on('card selected', (card) => {
     if(!new_cards[card].selected) new_cards[card].selected = true;
     else new_cards[card].selected = false;
-    console.log('card: ' + card);
-    io.emit('card selected', card);
+    io.emit('card selected', new_cards);
   });
   socket.on('spymaster', (spy) => {
     if(spy) spymaster++;
     else if(spymaster > 0) spymaster--;
     io.emit('spymaster', spymaster);
-    console.log('spymasters: ', spymaster);
   });
   socket.on('turn', (whoTurn) => {
     turn = whoTurn;
@@ -157,7 +132,16 @@ io.on('connection', (socket) => {
   });
   socket.on('death card', (death) => {
     death_win = death;
-    io.emit('death card');
+    io.emit('death card', death_win);
+  });
+  socket.on('shuffle', () => {
+    _pickCards(); //don't reshuffle, just pick new cards
+    io.emit('next game', new_cards);
+  });
+  socket.on('reset', () => {
+    spymaster = 0;
+    turn = "Blue";
+    io.emit('spymaster reset');
   });
 });
 
