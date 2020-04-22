@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app='codenames'>
+<head>
+  <link rel="stylesheet" href="../reset.css">
+  <link rel="stylesheet" href="codenames.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <!--<meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no;user-scalable=0;"/>-->
+</head>
+<body ng-controller='codenamesController'>
+  <script src="../jquery.js"></script>
+  <script src="../angular.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src='codenames.js'></script>
+<div class="role">
+  <button ng-click="role('spymaster')" ng-disabled='(masters>1)'>Spymaster</button>
+  <button ng-click="role('agent')">Agent</button>
+  <input type="radio" name="team" value="Red" ng-model="team"> Red
+  <input type="radio" name="team" value="Blue" ng-model="team"> Blue
+  <input type="radio" name="team" value="Spectator" ng-model="team"> Spectator
+  <input type="checkbox" ng-model="kid"> Kid Mode
+  <button class="nextG" ng-click="reset()">Reset</button>
+  <button class="nextG" ng-click="nextGame()">Next Game</button>
+</div>
+<div class="title">
+  <h1 ng-class="[{blueremain : (title == 'BLUE WINS!!!')}, {redremain : (title == 'RED WINS!!!')}]">{{title}}</h1>
+</div>
+
+<div class="board">
+  <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span> <span ng-class="[{blueremain : (turn == 'Blue')}, {redremain : (turn == 'Red')}]">{{turn}}'s turn!</span></p>
+  <button class="turn" ng-click="endTurn()">End Turn</button>
+  <p class="spymasters">Spymasters: {{masters}}</p>
+  <ul>
+    <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
+      <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">
+        <p class="word" ng-class="[{selected: card.selected}, {'{{card.textColor}}' : spymaster}]">{{card.word}}</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="alert">
+  <h1 class="message">Good Job!!!</h1>
+</div>
+
+</body>
+</html>

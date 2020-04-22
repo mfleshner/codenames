@@ -7,6 +7,11 @@ const app = express();
 var CardModel = require('./cards');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var databases = [{database: "codenames", all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: ""},
+{database: "codenames2", all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: ""},
+{database: "codenames3", all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: ""},
+{database: "codenames4", all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: ""}];
+var database_index = 0;
 var all_cards = [];
 var new_cards = [];
 var old_arr = [];
@@ -80,7 +85,7 @@ _newCards = function(){
     if (err) console.log('Error getting cards:', err);
     else {
       all_cards = cards;
-      if(all_cards.length > 1) _shuffle();
+      if(all_cards.length > 25) _shuffle();
       spymaster = 0; //reset spymaster
     }
   });
