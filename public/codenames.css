@@ -10,6 +10,19 @@ body {
   /*text-align: center;*/
 }
 
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
 .role{
   margin: 1em;
   color: white;
@@ -34,6 +47,7 @@ body {
 .remaining {
   text-align: left;
   margin: 0 1em;
+  padding: 3px;
   font-size: 0.5em;
   color: white;
   float: left;
@@ -49,7 +63,7 @@ body {
 
 .agents {
   text-align: right;
-  margin: 0 1em;
+  margin: 1em;
   font-size: 0.5em;
   color: white;
 }
@@ -89,8 +103,18 @@ body {
   }
 }
 
+@media only screen and (max-device-width: 375px) {
+  .nextG {
+    margin: 0;
+  }
+}
+
 .selected {
   opacity: 0;
+}
+
+.server_choice {
+  background-color: teal;
 }
 
 .blue {
