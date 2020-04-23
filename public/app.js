@@ -16,6 +16,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.turn = "Blue";
   $scope.team = "Spectator";
   $scope.kid = false;
+  $scope.show_words = false;
 
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
@@ -27,6 +28,11 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
       }
       $scope.spymaster = true;
     },3000);
+  }
+
+  $scope.showWords =function(){
+    console.log('show');
+    $scope.show_words = !$scope.show_words;
   }
 
   $scope.server = function(server){
@@ -158,7 +164,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     if(db == $scope.database){
       $scope.reset();
       $scope.title = "Code Fleshy";
-      $scope.$apply(function(){ $scope.cards = cards;});
+      $scope.$apply(function(){ $scope.cards = cards; _remaining();});
     }
   });
   socket.emit('database', $scope.database);

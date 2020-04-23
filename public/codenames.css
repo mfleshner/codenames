@@ -3,6 +3,13 @@
   src: url('fonts/IndieFlower-Regular.ttf');
 }
 
+.preload-images {
+	background-image: url('img/blueback2.jpg'),
+  url('img/blackback2.jpg'),
+  url('img/redback2.jpg'),
+  url('img/yellowback2.jpg');
+}
+
 body {
   background-color: #333333;
   font-size: 16px;
@@ -111,6 +118,12 @@ button {
 
 .selected {
   opacity: 0;
+}
+
+.showWords {
+  opacity: 1;
+  padding: 3px;
+  background-color: white;
 }
 
 .server_choice {

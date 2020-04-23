@@ -14,6 +14,7 @@
 <div class="role">
   <button ng-click="role('spymaster')" ng-disabled='(masters>1)' ng-class="{server_choice: spymaster}">Spymaster</button>
   <button ng-click="role('agent')" ng-class="{server_choice: !spymaster}">Agent</button>
+  <button ng-click="showWords()" ng-class="{server_choice: show_words}">Show Words</button>
   <input type="radio" name="team" value="Red" ng-model="team"> Red
   <input type="radio" name="team" value="Blue" ng-model="team"> Blue
   <input type="radio" name="team" value="Spectator" ng-model="team"> Spectator
@@ -37,7 +38,7 @@
   <ul>
     <li ng-repeat='card in cards | limitTo : 25 : 0' ng-click="select(card)">
       <div class="card" ng-class="{'{{card.backColor}}' : card.selected}">
-        <p class="word" ng-class="[{selected: card.selected}, {'{{card.textColor}}' : spymaster}]">{{card.word}}</p>
+        <p class="word" ng-class="[{selected: card.selected}, {'{{card.textColor}}' : spymaster}, {showWords: show_words && card.selected}]">{{card.word}}</p>
       </div>
     </li>
   </ul>
@@ -46,6 +47,7 @@
 <div class="alert">
   <h1 class="message">Good Job!!!</h1>
 </div>
+<div class="preload-images"></div>
 
 </body>
 </html>
