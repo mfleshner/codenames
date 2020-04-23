@@ -20,6 +20,10 @@
   <input type="checkbox" ng-model="kid"> Kid Mode
   <button class="nextG" ng-click="reset()">Reset</button>
   <button class="nextG" ng-click="nextGame()">Next Game</button>
+  <button class="nextG" ng-click="server(4)">Server 4</button>
+  <button class="nextG" ng-click="server(3)">Server 3</button>
+  <button class="nextG" ng-click="server(2)">Server 2</button>
+  <button class="nextG" ng-click="server(1)">Server 1</button>
 </div>
 <div class="title">
   <h1 ng-class="[{blueremain : (title == 'BLUE WINS!!!')}, {redremain : (title == 'RED WINS!!!')}]">{{title}}</h1>

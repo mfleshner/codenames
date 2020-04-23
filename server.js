@@ -33,56 +33,63 @@ var shuffleArray = function(array) {
   return array;
 }
 
-_pickCards = function(){
+_pickCards = function(server){
   var arr = [];
   while(arr.length < 25){
-    var r = Math.floor(Math.random() * (database[0].all_cards.length-1));
-    if((arr.indexOf(r) === -1) && (database[0].old_arr.indexOf(r) === -1)){ arr.push(r); database[0].old_arr.push(r);}
+    var r = Math.floor(Math.random() * (database[server].all_cards.length-1));
+    if((arr.indexOf(r) === -1) && (database[server].old_arr.indexOf(r) === -1)){ arr.push(r); database[server].old_arr.push(r);}
   }
-  if(database[0].old_arr.length > 795) database[0].old_arr = [];
+  if(database[server].old_arr.length > 795) database[server].old_arr = [];
   for(var i = 0; i < 25; i++){
-    database[0].new_cards[i] = database[0].all_cards[arr[i]];
-    database[0].new_cards[i].selected = false;
+    database[server].new_cards[i] = database[server].all_cards[arr[i]];
+    database[server].new_cards[i].selected = false;
   }
   var arr = [];
   while(arr.length < 25){
-    var r = Math.floor(Math.random() * (database[0].new_cards.length));
+    var r = Math.floor(Math.random() * (database[server].new_cards.length));
     if(arr.indexOf(r) === -1) arr.push(r);
   }
   for(var i = 0; i < 9; i++){
-    database[0].new_cards[arr[i]].textColor = "blue";
-    database[0].new_cards[arr[i]].backColor = "backblue";
+    database[server].new_cards[arr[i]].textColor = "blue";
+    database[server].new_cards[arr[i]].backColor = "backblue";
   }
   for(var i = 9; i < 17; i++){
-    database[0].new_cards[arr[i]].textColor = "red";
-    database[0].new_cards[arr[i]].backColor = "backred";
+    database[server].new_cards[arr[i]].textColor = "red";
+    database[server].new_cards[arr[i]].backColor = "backred";
   }
   for(var i = 17; i < 24; i++){
-    database[0].new_cards[arr[i]].textColor = "yellow";
-    database[0].new_cards[arr[i]].backColor = "backyellow";
+    database[server].new_cards[arr[i]].textColor = "yellow";
+    database[server].new_cards[arr[i]].backColor = "backyellow";
   }
-  database[0].new_cards[arr[24]].textColor = "black";
-  database[0].new_cards[arr[24]].backColor = "backblack";
+  database[server].new_cards[arr[24]].textColor = "black";
+  database[server].new_cards[arr[24]].backColor = "backblack";
 }
 
-_shuffle = function(){
-  shuffleArray(database[0].all_cards);
-  _pickCards();
-  console.log("server: 25 new cards!");
+_shuffle = function(server){
+  shuffleArray(database[server].all_cards);
+  _pickCards(server);
+  console.log("server: 25 new cards created on: ", server);
 }
 
-_newCards = function(){
+_newCards = function(server){
   console.log("Getting Cards...");
   CardModel.find({}).lean().exec(function (err, cards) {
     if (err) console.log('Error getting cards:', err);
     else {
-      database[0].all_cards = cards;
-      if(database[0].all_cards.length > 1) _shuffle();
-      database[0].spymaster = 0; //reset spymaster
+      database[server].all_cards = cards;
+      if(database[server].all_cards.length > 1) _shuffle(server);
+      database[server].spymaster = 0; //reset spymaster
     }
   });
 }
-_newCards();
+//_newCards();
+
+_eachServer = function(){
+  for(var i = 0; i < database.length; i++){
+    _newCards(i);
+  }
+}
+_eachServer();
 
 app.put('/cards', function (req, res) {
   var item = req.body
@@ -102,14 +109,12 @@ http.listen(8090, () => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  database[0].players++;
-  io.emit('spymaster', database[0].spymaster); //send spymaster count
-  io.emit('get cards', database[0].new_cards); //send current cards
-  io.emit('turn', database[0].turn); //send current turn
-  io.emit('players', database[0].players); //send player count
+  //io.emit('spymaster', database[0].spymaster); //send spymaster count
+  //io.emit('get cards', database[0].new_cards); //send current cards
+  //io.emit('turn', database[0].turn); //send current turn
+  //io.emit('players', database[0].players); //send player count
   socket.on('disconnect', () => {
     console.log('user disconnected');
-    database[0].players--;
     io.emit('players', database[0].players); //send player count
   });
   socket.on('card selected', (card) => {
@@ -117,10 +122,10 @@ io.on('connection', (socket) => {
     else database[0].new_cards[card].selected = false;
     io.emit('card selected', database[0].new_cards);
   });
-  socket.on('spymaster', (spy) => {
-    if(spy) database[0].spymaster++;
-    else if(database[0].spymaster > 0) database[0].spymaster--;
-    io.emit('spymaster', database[0].spymaster);
+  socket.on('spymaster', (spy, db) => {
+    if(spy) database[db].spymaster++;
+    else if(database[db].spymaster > 0) database[db].spymaster--;
+    io.emit('spymaster', database[db].spymaster, db);
   });
   socket.on('turn', (whoTurn) => {
     database[0].turn = whoTurn;
@@ -138,6 +143,13 @@ io.on('connection', (socket) => {
     database[0].spymaster = 0;
     database[0].turn = "Blue";
     io.emit('spymaster reset');
+  });
+  socket.on('database', (db) => {
+    database[db].players++;
+    io.emit('players', database[db].players); //send player count
+    io.emit('spymaster', database[db].spymaster, db); //send spymaster count
+    io.emit('get cards', database[db].new_cards); //send current cards
+    io.emit('turn', database[db].turn); //send current turn
   });
 });
 
