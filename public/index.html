@@ -14,7 +14,7 @@
 <div class="role">
   <button ng-click="role('spymaster')" ng-disabled='(masters>1)' ng-class="{server_choice: spymaster}">Spymaster</button>
   <button ng-click="role('agent')" ng-class="{server_choice: !spymaster}">Agent</button>
-  <button ng-click="showWords()" ng-class="{server_choice: show_words}">Show Words</button>
+  <button ng-click="showWords()" ng-class="{server_choice: show_words}">{{show_hide}}</button>
   <input type="radio" name="team" value="Red" ng-model="team"> Red
   <input type="radio" name="team" value="Blue" ng-model="team"> Blue
   <input type="radio" name="team" value="Spectator" ng-model="team"> Spectator

@@ -17,6 +17,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.team = "Spectator";
   $scope.kid = false;
   $scope.show_words = false;
+  $scope.show_hide = "Show Words";
 
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
@@ -31,7 +32,8 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   }
 
   $scope.showWords =function(){
-    console.log('show');
+    if($scope.show_words) $scope.show_hide = "Show Words";
+    else $scope.show_hide = "Hide Words";
     $scope.show_words = !$scope.show_words;
   }
 
