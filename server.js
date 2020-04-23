@@ -117,39 +117,39 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
     io.emit('players', database[0].players); //send player count
   });
-  socket.on('card selected', (card) => {
-    if(!database[0].new_cards[card].selected) database[0].new_cards[card].selected = true;
-    else database[0].new_cards[card].selected = false;
-    io.emit('card selected', database[0].new_cards);
+  socket.on('card selected', (card, db) => {
+    if(!database[db].new_cards[card].selected) database[db].new_cards[card].selected = true;
+    else database[db].new_cards[card].selected = false;
+    io.emit('card selected', database[db].new_cards, db);
   });
   socket.on('spymaster', (spy, db) => {
     if(spy) database[db].spymaster++;
     else if(database[db].spymaster > 0) database[db].spymaster--;
     io.emit('spymaster', database[db].spymaster, db);
   });
-  socket.on('turn', (whoTurn) => {
-    database[0].turn = whoTurn;
-    io.emit('turn', database[0].turn);
+  socket.on('turn', (whoTurn, db) => {
+    database[db].turn = whoTurn;
+    io.emit('turn', database[db].turn, db);
   });
-  socket.on('death card', (death) => {
-    database[0].death_win = death;
-    io.emit('death card', database[0].death_win);
+  socket.on('death card', (death, db) => {
+    database[db].death_win = death;
+    io.emit('death card', database[db].death_win, db);
   });
-  socket.on('shuffle', () => {
-    _pickCards(); //don't reshuffle, just pick new cards
-    io.emit('next game', database[0].new_cards);
+  socket.on('shuffle', (db) => {
+    _pickCards(db); //don't reshuffle, just pick new cards
+    io.emit('next game', database[db].new_cards, db);
   });
-  socket.on('reset', () => {
-    database[0].spymaster = 0;
-    database[0].turn = "Blue";
-    io.emit('spymaster reset');
+  socket.on('reset', (db) => {
+    database[db].spymaster = 0;
+    database[db].turn = "Blue";
+    io.emit('spymaster reset', db);
   });
   socket.on('database', (db) => {
     database[db].players++;
-    io.emit('players', database[db].players); //send player count
+    io.emit('players', database[db].players, db); //send player count
     io.emit('spymaster', database[db].spymaster, db); //send spymaster count
-    io.emit('get cards', database[db].new_cards); //send current cards
-    io.emit('turn', database[db].turn); //send current turn
+    io.emit('get cards', database[db].new_cards, db); //send current cards
+    io.emit('turn', database[db].turn, db); //send current turn
   });
 });
 
