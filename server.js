@@ -7,10 +7,11 @@ const app = express();
 var CardModel = require('./cards');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-var database = [{all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0},
-                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0},
-                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0},
-                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0}];
+var database = [{all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0, ids: []},
+                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0, ids: []},
+                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0, ids: []},
+                 {all_cards: [], new_cards: [], old_arr: [], spymaster: 0, turn: "Blue", death_win: "", players: 0, ids: []}];
+var total_players = 0;
 app.use(express.static('./public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -107,15 +108,40 @@ http.listen(8090, () => {
   console.log('listening on: 8090');
 });
 
+_playerServerChange = function(id){
+  var found = false;
+  for(var i = 0; i < database.length; i++){
+    for(var j = 0; j < database[i].ids.length; j++){
+      if(id == database[i].ids[j]){
+        found = true;
+        database[i].ids.splice(j, 1);
+        database[i].players--;
+        io.emit('players', database[i].players, i); //send player count
+        break;
+      }
+      if(found) break;
+    }
+  }
+}
+
 io.on('connection', (socket) => {
-  console.log('a user connected');
-  //io.emit('spymaster', database[0].spymaster); //send spymaster count
-  //io.emit('get cards', database[0].new_cards); //send current cards
-  //io.emit('turn', database[0].turn); //send current turn
-  //io.emit('players', database[0].players); //send player count
+  console.log('a user connected: ', socket.id);
+  io.emit('total players', total_players); //send player count
   socket.on('disconnect', () => {
-    console.log('user disconnected');
-    io.emit('players', database[0].players); //send player count
+    console.log('user disconnected', socket.id);
+    var found = false;
+    for(var i = 0; i < database.length; i++){
+      for(var j = 0; j < database[i].ids.length; j++){
+        if(socket.id == database[i].ids[j]){
+          found = true;
+          database[i].ids.splice(j, 1);
+          database[i].players--;
+          io.emit('players', database[i].players, i); //send player count
+          break;
+        }
+        if(found) break;
+      }
+    }
   });
   socket.on('card selected', (card, db) => {
     if(!database[db].new_cards[card].selected) database[db].new_cards[card].selected = true;
@@ -145,6 +171,8 @@ io.on('connection', (socket) => {
     io.emit('spymaster reset', db);
   });
   socket.on('database', (db) => {
+    _playerServerChange(socket.id);
+    database[db].ids[database[db].players] = socket.id;
     database[db].players++;
     io.emit('players', database[db].players, db); //send player count
     io.emit('spymaster', database[db].spymaster, db); //send spymaster count
