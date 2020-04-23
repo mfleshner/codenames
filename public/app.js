@@ -30,8 +30,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   }
 
   $scope.server = function(server){
-    $scope.spymaster = false;
-    socket.emit('spymaster', $scope.spymaster, $scope.database);
+    if($scope.spymaster){ $scope.spymaster = false; socket.emit('spymaster', $scope.spymaster, $scope.database); }
     switch(server){
       case 1:
         console.log("server: ", server);
@@ -139,6 +138,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
         $scope.spymaster = false;
         $scope.masters = 0;
         $scope.turn = "Blue";
+        $scope.agents = $scope.players - $scope.masters;
       });
     }
   });
