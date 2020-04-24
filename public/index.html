@@ -3,10 +3,11 @@
 <head>
   <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="codenames.css">
+  <link rel="stylesheet" href="radio_slider.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
   <!--<meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no;user-scalable=0;"/>-->
 </head>
-<body ng-controller='appController'>
+<body ng-controller='appController' ng-style="{'font-family': font ? 'Times New Roman' : 'flower'}">
   <script src="jquery.js"></script>
   <script src="angular.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -15,10 +16,11 @@
   <button ng-click="role('spymaster')" ng-disabled='(masters>1)' ng-class="{server_choice: spymaster}">Spymaster</button>
   <button ng-click="role('agent')" ng-class="{server_choice: !spymaster}">Agent</button>
   <button ng-click="showWords()" ng-class="{server_choice: show_words}">{{show_hide}}</button>
-  <input type="radio" name="team" value="Red" ng-model="team"> Red
+  <button ng-click="options()">Options</button>
+  <!--<input type="radio" name="team" value="Red" ng-model="team"> Red
   <input type="radio" name="team" value="Blue" ng-model="team"> Blue
   <input type="radio" name="team" value="Spectator" ng-model="team"> Spectator
-  <input type="checkbox" ng-model="kid"> Kid Mode
+  <input type="checkbox" ng-model="kid"> Kid Mode-->
   <button class="nextG" ng-click="reset()">Reset</button>
   <button class="nextG" ng-click="nextGame()">Next Game</button>
   <button class="nextG" ng-click="server(4)" ng-class="{server_choice: (database == 3)}">Server 4</button>
@@ -31,8 +33,8 @@
 </div>
 
 <div class="board">
-  <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span> <span ng-class="[{blueremain : (turn == 'Blue')}, {redremain : (turn == 'Red')}]">{{turn}}'s turn!</span></p>
-  <button class="turn" ng-click="endTurn()">End Turn</button>
+  <p class="remaining"><span class="blueremain">{{blue}}</span> - <span class="redremain">{{red}}</span> <!--<span ng-class="[{blueremain : (turn == 'Blue')}, {redremain : (turn == 'Red')}]">{{turn}}'s turn!</span>--></p>
+  <!--<button class="turn" ng-click="endTurn()">End Turn</button>-->
   <p class="spymasters">Spymasters: {{masters}}</p>
   <p class="agents">Agents: {{agents}}</p>
   <ul>
@@ -42,6 +44,16 @@
       </div>
     </li>
   </ul>
+</div>
+
+<div class="options" ng-if="show_options">
+  <button class="close" ng-click="options()">X</button>
+  <h1 class="optionsTitle">Options</h1>
+  <label class="switch">
+    <label for="font" class="checkboxlbl">Default Font</label>
+    <input type="checkbox" id="font" ng-model="font" ng-click="fontChange()">
+    <span class="slider round"></span>
+  </label>
 </div>
 
 <div class="alert">

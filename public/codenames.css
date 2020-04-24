@@ -14,11 +14,12 @@ body {
   background-color: #333333;
   font-size: 16px;
   font-family: flower;
+  font-weight: bolder;
   /*text-align: center;*/
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: gray;
   border: none;
   color: white;
   padding: 5px 12px;
@@ -127,7 +128,7 @@ button {
 }
 
 .server_choice {
-  background-color: teal;
+  background-color: #4CAF50;
 }
 
 .blue {
@@ -200,5 +201,31 @@ button {
 }
 
 .message {
+  margin: 1em;
+}
+
+.options {
+  position: absolute;
+  top: 25%;
+  right: 25%;
+  height: 45vh;
+  width: 50%;
+  background-color: #777777;
+  border: 5px solid #4CAF50;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 2em;
+  color: white;
+}
+
+.close {
+  font-family: flower;
+  float: right;
+  font-weight: bolder;
+  font-size: 1em;
+  background-color: rgba(0,0,0,0);
+}
+
+.optionsTitle {
   margin: 1em;
 }
