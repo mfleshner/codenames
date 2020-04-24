@@ -154,7 +154,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
     if(db == $scope.database) $scope.$apply(function(){ $scope.turn = turn;});
   });
   socket.on('card selected', function(cards, db){ //card selected
-    if(db == $scope.database) $scope.$apply(function(){ $scope.cards = cards;});
+    if(db == $scope.database) $scope.$apply(function(){ $scope.cards = cards; _remaining();});
   });
   socket.on('death card', function(death_win, db){ //win by death card
     if(db == $scope.database) $scope.$apply(function(){ $scope.death_win = death_win; _gameover();});
