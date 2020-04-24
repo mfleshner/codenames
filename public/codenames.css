@@ -131,57 +131,6 @@ button {
   background-color: #4CAF50;
 }
 
-.blue {
-  color: blue;
-}
-
-.red {
-  color: red;
-}
-
-.yellow {
-  color: #b39600
-}
-
-.black {
-  color: black;
-  border: 2px dashed black;
-  width: 50%;
-  margin: 5.75vh auto;
-}
-
-.backblue {
-  background-color: blue;
-  background-image: url('img/blueback2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-
-.backred {
-  background-color: red;
-  background-image: url('img/redback2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-
-.backyellow {
-  background-color: #f1f170;
-  background-image: url('img/yellowback2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-
-.backblack {
-  background-color: black;
-  background-image: url('img/blackback2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-
 .nextGame {
   float: right;
   margin: 0 1em;
