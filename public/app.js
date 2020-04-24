@@ -10,6 +10,7 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.spymaster = false;
   $scope.masters = 0;
   $scope.agents = 0;
+  $scope.agent = false;
   $scope.players = 0;
   $scope.red = $scope.blue = 0;
   $scope.title = "Code Fleshy";
@@ -24,7 +25,8 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   _gameover = function(){
     if($scope.red == 0) $scope.title = "RED WINS!!!";
     else if($scope.blue == 0) $scope.title = "BLUE WINS!!!";
-    else $scope.title = $scope.title = $scope.death_win;
+    $scope.title = $scope.title = "Game Over!!!";
+    //else $scope.title = $scope.title = $scope.death_win;
     $timeout(function(){
       for(i = 0; i < 25; i++){
         $scope.cards[i].selected = false;
@@ -102,13 +104,14 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
   $scope.role = function(role){
     var old = $scope.spymaster;
     if(role == 'spymaster' && ($scope.masters < 2) && !old){
-      $scope.spymaster = true;
+      $scope.spymaster = true; $scope.agent = false;
       socket.emit('spymaster', $scope.spymaster, $scope.database);
     }
     else if(role == "agent" && old){
-      $scope.spymaster = false;
+      $scope.spymaster = false; $scope.agent = true;
       socket.emit('spymaster', $scope.spymaster, $scope.database);
     }
+    else if(role == "agent") $scope.agent = !$scope.agent;
   }
 
   $scope.nextGame = function(){
@@ -118,30 +121,31 @@ angular.module('codenames', []).controller('appController', function($scope, $ht
 
   $scope.select = function(card){
     //if(($scope.team == $scope.turn || $scope.spymaster) && !$scope.kid) {
-    if(!card.selected){
-      if(card.textColor == "red"){
-        $scope.red--;
-        if($scope.turn == "Blue") $scope.endTurn();
+    if($scope.agent || $scope.spymaster){
+      if(!card.selected){
+        if(card.textColor == "red"){
+          $scope.red--;
+          if($scope.turn == "Blue") $scope.endTurn();
+        }
+        else if(card.textColor == "blue"){
+          $scope.blue--;
+          if($scope.turn == "Red") $scope.endTurn();
+        }
+        else if(card.textColor == "black"){
+          if($scope.turn == "Red") $scope.death_win = "BLUE WINS!!!";
+          else $scope.death_win = "RED WINS!!!";
+          socket.emit('death card', $scope.death_win, $scope.database);
+          //_gameover();
+        }
+        else $scope.endTurn();
       }
-      else if(card.textColor == "blue"){
-        $scope.blue--;
-        if($scope.turn == "Red") $scope.endTurn();
+      else{
+        if(card.textColor == "red") $scope.red++;
+        else if(card.textColor == "blue") $scope.blue++;
       }
-      else if(card.textColor == "black"){
-        if($scope.turn == "Red") $scope.death_win = "BLUE WINS!!!";
-        else $scope.death_win = "RED WINS!!!";
-        socket.emit('death card', $scope.death_win, $scope.database);
-        //_gameover();
-      }
-      else $scope.endTurn();
+      socket.emit('card selected', $scope.cards.indexOf(card), $scope.database);
+      if($scope.red == 0 || $scope.blue == 0) _gameover();
     }
-    else{
-      if(card.textColor == "red") $scope.red++;
-      else if(card.textColor == "blue") $scope.blue++;
-    }
-    socket.emit('card selected', $scope.cards.indexOf(card), $scope.database);
-    if($scope.red == 0 || $scope.blue == 0) _gameover();
-    //}
   }
 
   socket.on('get cards', function(cards, db){ //new spymaster added
